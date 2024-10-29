@@ -1,72 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace LegacySystem
 {
-    class MainSistema
+    class MainSystem
     {
+        private const string CompanyName = "Empresa Teste";
+        private const string TransactionDescription = "Compra de Insumo";
+        private const int LoopCount = 5;
+        private const int SummationLimit = 10;
+
         static void Main(string[] args)
         {
-            SistemaCliente sc = new SistemaCliente();
-            sc.AddCliente(1, "Joao", "joao@email.com");
-            sc.AddCliente(2, "Maria", "maria@email.com");
+            var clientSystem = new ClientSystem();
+            clientSystem.AddClient(1, "Joao", "joao@email.com");
+            clientSystem.AddClient(2, "Maria", "maria@email.com");
 
-            SistemaTransacoes st = new SistemaTransacoes();
-            st.AdicionarTransacao(1, 100.50m, "Compra de Produto");
-            st.AdicionarTransacao(2, 200.00m, "Compra de Serviço");
-            st.AdicionarTransacao(3, 300.75m, "Compra de Software");
+            var transactionSystem = new TransactionSystem();
+            transactionSystem.AddTransaction(1, 100.50m, "Compra de Produto");
+            transactionSystem.AddTransaction(2, 200.00m, "Compra de Serviço");
+            transactionSystem.AddTransaction(3, 300.75m, "Compra de Software");
 
-            sc.ExibirTodosOsClientes();
-            st.ExibirTransacoes();
+            clientSystem.DisplayAllClients();
+            transactionSystem.DisplayTransactions();
 
-            sc.removerCliente(1);
-            sc.ExibirTodosOsClientes();
+            clientSystem.RemoveClient(1);
+            clientSystem.DisplayAllClients();
 
-            sc.AtualizarNomeCliente(2, "Maria Silva");
+            clientSystem.UpdateClientName(2, "Maria Silva");
 
-            string nomeEmpresa = "Empresa Teste";
-            string descricaoTransacao = "Compra de Insumo";
+            DisplayCompanyInfo();
 
-            for (int i = 0; i < 5; i++)
+            var report = new Report();
+            report.GenerateClientReport(clientSystem.Clients);
+            report.GenerateDuplicateClientReport(clientSystem.Clients);
+
+            int sumResult = CalculateSummation();
+            Console.WriteLine("Total Sum: " + sumResult);
+
+            int duplicatedSumResult = CalculateSummation();
+            Console.WriteLine("Duplicated Sum: " + duplicatedSumResult);
+        }
+
+        #region Helper Methods
+        private static void DisplayCompanyInfo()
+        {
+            for (int i = 0; i < LoopCount; i++)
             {
-                Console.WriteLine("Nome da Empresa: " + nomeEmpresa + " Descrição: " + descricaoTransacao);
-            }
-
-            for (int i = 0; i < 5; i++)
-            {
-                Console.WriteLine("Nome da Empresa: " + nomeEmpresa + " Descrição: " + descricaoTransacao);
-            }
-
-            for (int i = 0; i < 5; i++)
-            {
-                Console.WriteLine("Nome da Empresa: " + nomeEmpresa + " Descrição: " + descricaoTransacao);
-            }
-
-            for (int i = 0; i < 5; i++)
-            {
-                Console.WriteLine("Nome da Empresa: " + nomeEmpresa + " Descrição: " + descricaoTransacao);
-            }
-
-            Relatorio relatorio = new Relatorio();
-            relatorio.GerarRelatorioCliente(sc.clientes);
-            relatorio.GerarRelatorioClienteDuplicado(sc.clientes);
-
-            int soma = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                //Soma mais 1
-                soma += i;
-            }
-
-            Console.WriteLine("Soma total: " + soma);
-
-            int somaDuplicada = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                //Soma Duplicada
-                somaDuplicada += i;
+                Console.WriteLine($"Company Name: {CompanyName} Description: {TransactionDescription}");
             }
         }
+
+        private static int CalculateSummation()
+        {
+            int sum = 0;
+            for (int i = 0; i < SummationLimit; i++)
+            {
+                sum += i;
+            }
+            return sum;
+        }
+        #endregion
     }
 }
